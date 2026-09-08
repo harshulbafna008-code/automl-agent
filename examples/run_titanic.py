@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """End-to-end example: run the AutoML-Agent on a small synthetic
 classification dataset (Titanic-like) so you can try the whole loop
 without needing to source your own CSV first.
@@ -17,9 +16,9 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from automl_agent.agent.orchestrator import AutoMLAgent  # noqa: E402
-from automl_agent.config import RunConfig  # noqa: E402
-from automl_agent.llm.ollama_client import OllamaClient  # noqa: E402
+from automl_agent.agent.orchestrator import AutoMLAgent  
+from automl_agent.config import RunConfig  
+from automl_agent.llm.ollama_client import OllamaClient 
 
 
 def make_toy_titanic(n: int = 600, seed: int = 0) -> pd.DataFrame:
@@ -27,12 +26,11 @@ def make_toy_titanic(n: int = 600, seed: int = 0) -> pd.DataFrame:
     pclass = rng.choice([1, 2, 3], size=n, p=[0.2, 0.3, 0.5])
     sex = rng.choice(["male", "female"], size=n, p=[0.55, 0.45])
     age = np.clip(rng.normal(30, 12, size=n), 1, 80)
-    age[rng.random(n) < 0.1] = np.nan  # inject some missingness
+    age[rng.random(n) < 0.1] = np.nan  
     fare = np.clip(rng.exponential(30, size=n) + (3 - pclass) * 10, 1, 300)
     embarked = rng.choice(["S", "C", "Q"], size=n, p=[0.7, 0.2, 0.1])
     sibsp = rng.poisson(0.5, size=n)
 
-    # Survival probability loosely mimics real Titanic patterns.
     logit = (
         -0.8
         + (sex == "female") * 2.2
