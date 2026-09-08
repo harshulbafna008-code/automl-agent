@@ -60,9 +60,8 @@ class AutoMLAgent:
         self.llm = llm
         self.state = RunState()
 
-    # ------------------------------------------------------------------ #
+  
     # Public entry point
-    # ------------------------------------------------------------------ #
     def run(self) -> Dict[str, Any]:
         start_time = time.time()
         out_dir = self.config.resolved_out_dir()
@@ -107,9 +106,8 @@ class AutoMLAgent:
 
         return self._finalize(x, y, task, profile, out_dir, time.time() - start_time)
 
-    # ------------------------------------------------------------------ #
+   
     # Planning
-    # ------------------------------------------------------------------ #
     def _get_initial_plan(self, profile: Dict[str, Any], task: str, llm_ready: bool) -> Dict[str, Any]:
         if not llm_ready:
             return default_plan(task)
@@ -194,9 +192,8 @@ class AutoMLAgent:
             # Stash preprocessing spec alongside the result for final refit.
             result.cv_results_summary["preprocessing"] = preprocessing_spec
 
-    # ------------------------------------------------------------------ #
+    
     # Finalization
-    # ------------------------------------------------------------------ #
     def _finalize(
         self,
         x: pd.DataFrame,
@@ -268,9 +265,7 @@ class AutoMLAgent:
 
         return "\n".join(lines) + "\n"
 
-    # ------------------------------------------------------------------ #
     # LLM call helpers
-    # ------------------------------------------------------------------ #
     def _safe_llm_call(self, system_prompt: str, user_prompt: str) -> Optional[str]:
         try:
             return self.llm.complete(system_prompt, user_prompt, json_mode=True)
@@ -283,7 +278,6 @@ class AutoMLAgent:
         if not raw:
             return None
         text = raw.strip()
-        # Strip markdown code fences if the model added them despite instructions.
         if text.startswith("```"):
             text = text.strip("`")
             if text.lower().startswith("json"):
@@ -291,7 +285,6 @@ class AutoMLAgent:
         try:
             return json.loads(text)
         except json.JSONDecodeError:
-            # Last resort: try to find the outermost {...} block.
             start, end = text.find("{"), text.rfind("}")
             if start != -1 and end != -1 and end > start:
                 try:
