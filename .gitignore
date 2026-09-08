@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+venv/
+.env
+runs/
+*.joblib
+*.log
+.DS_Store
+.vscode/
+.idea/
+.pytest_cache/
+build/
+dist/
