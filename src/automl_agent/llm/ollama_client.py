@@ -34,7 +34,6 @@ class OllamaClient(LLMClient):
             resp = requests.get(f"{self.host}/api/tags", timeout=5)
             resp.raise_for_status()
             tags = [m.get("name", "") for m in resp.json().get("models", [])]
-            # Accept exact match or "name" without a ":tag" suffix matching.
             available = any(self.model == t or t.startswith(self.model.split(":")[0]) for t in tags)
             if not available:
                 logger.warning(
@@ -43,7 +42,7 @@ class OllamaClient(LLMClient):
                     self.model,
                     self.model,
                 )
-            return True  # server reachable; model availability is a soft warning
+            return True 
         except requests.RequestException as exc:
             logger.warning("Could not reach Ollama at %s: %s", self.host, exc)
             return False
